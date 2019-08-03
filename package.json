@@ -10,6 +10,9 @@
   "license": "ISC",
   "dependencies": {
     "@types/node": "^12.6.8",
-    "discord.js": "^11.5.1"
+    "discord.js": "^11.5.1",
+    "mysql": "^2.17.1",
+    "reflect-metadata": "^0.1.13",
+    "typeorm": "^0.2.18"
   }
 }

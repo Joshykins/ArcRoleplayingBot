@@ -18,7 +18,7 @@ Bot.on('ready', () => {
 Bot.on('message', (msg : Message) => {
   //Lets server restrict
   CommandParser(msg);
-  
+
   if(msg.channel instanceof TextChannel) {
     if(msg.channel.parent.name == "ArcRoleplaying") {
     }
@@ -26,7 +26,6 @@ Bot.on('message', (msg : Message) => {
 })
 
 Bot.on('guildMemberAdd', member => {
-
   let welcomeMessage = new RichEmbed();
   welcomeMessage.setAuthor(`Hello, ${member.user.username}!`, member.user.avatarURL);
   welcomeMessage.setTitle(`Welcome to **${member.guild.name}**, Live long and prosper!`);
@@ -37,6 +36,7 @@ Bot.on('guildMemberAdd', member => {
   //Had to do this to get rid of typing error, even though GuildChannel.send works??
   targetChannel.send(member,welcomeMessage);
 })
+
 Bot.on('guildMemberRemove', member => {
   let leaveMessage = new RichEmbed();
   leaveMessage.setAuthor(`Bye, ${member.user.username}!`, member.user.avatarURL);
@@ -48,4 +48,4 @@ Bot.on('guildMemberRemove', member => {
   targetChannel.send(leaveMessage);
 })
 
-Bot.login("NDM2MDUwNDc1OTQ3NjU1MTc4.XUPreA.NuBdmZAkT_vl5oLtL2Nd_ekiz-8");
+Bot.login("NDM2MDUwNDc1OTQ3NjU1MTc4.XUXrUw.voePsneELAANNkVS6MgU1jGdyFM");
