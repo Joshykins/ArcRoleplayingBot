@@ -1,7 +1,8 @@
-import { Message } from "discord.js";
+import { Message, RichEmbed } from "discord.js";
 import { ICommand, permissionLevel } from "./commandsTypings";
 import { CommandManager } from "./commands";
 import { Bot } from "..";
+import { User } from "../entities/User";
 
 export const Ping: ICommand = {
   permissionLevel: permissionLevel.user,
@@ -51,3 +52,92 @@ export const Clear: ICommand = {
   }
 };
 
+export const Help: ICommand = {
+  command: "Help",
+  description: "Displays all commands or gives help on a specific command.",
+  syntax: [
+    { syntaxName: "PageNumber", optional: true },
+    { syntaxName: "Command", optional: true }
+  ],
+  examples: [
+    {
+      example: " ",
+      exampleDesc: "Displays all commands on page 1."
+    },
+    {
+      example: " 2",
+      exampleDesc: "Displays all commands on page 2."
+    },
+    {
+      example: " clear",
+      exampleDesc: "Displays information regarding the clear command."
+    }
+  ],
+  permissionLevel: permissionLevel.user,
+  action(argv: string[], user: string, msg: Message) {
+    if (parseInt(argv[1])) {
+      let pageIndex = parseInt(argv[1]);
+      let commands: string[] = [];
+      let paginationNumb: number = 1;
+      let pageBefore: boolean = false;
+      let pageAfter: boolean = false;
+      let HelpMessage = new RichEmbed();
+      HelpMessage.setAuthor(
+        `${Bot.user.username} is giving assistance!`,
+        Bot.user.avatarURL
+      );
+      HelpMessage.setTitle(`Displaying help page ${pageIndex}.`);
+      HelpMessage.setColor(0xff0000);
+      if(CommandManager.commandList[(pageIndex - 1) * paginationNumb]) {
+        //Page exists    
+        CommandManager.commandList.forEach((elem, i) => {
+          if (i <= pageIndex - 1 * paginationNumb) {
+            pageBefore = true;
+          } 
+          else if (
+            i > (pageIndex - 1) * paginationNumb &&
+            i <= pageIndex * paginationNumb
+          ) {
+            HelpMessage.addField(
+              elem.command,
+              elem.description ? elem.description : "No Description",
+              false
+            );
+            commands.push(elem.command);
+          } else if ( i > pageIndex*paginationNumb) {
+            pageAfter = true;
+          }
+        });
+        msg.reply(HelpMessage).then((embed : Message)=> {
+          if(pageBefore) {
+            embed.react("◀");
+          }
+          if(pageAfter) {
+            embed.react("▶");
+          }
+        });
+      }
+      else {
+        //page doesnt exist
+        HelpMessage.setDescription("Invalid Page Number");
+          
+        msg.reply(HelpMessage);
+      }
+    } else {
+      msg.reply("pg was empty noob");
+    }
+  }
+};
+
+export const InitlizeUser: ICommand = {
+  command: "inituser",
+  permissionLevel: permissionLevel.user,
+  action(argv: string[], user: string, msg: Message) {
+    let newUser = new User();
+    newUser.id = parseInt(user);
+    newUser.username = msg.author.username;
+    newUser.save().catch(err => {
+      console.log(err);
+    });
+  }
+};

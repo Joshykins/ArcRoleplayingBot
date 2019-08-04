@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-import {Client, Message, TextChannel, MessageEmbedProvider, GuildChannel, RichEmbed} from 'discord.js';
+import {Client, Message, TextChannel, MessageEmbedProvider, GuildChannel, RichEmbed, MessageReaction} from 'discord.js';
 import {CommandManager, CommandParser} from "./commands/commands";
 export const Bot = new Client;
 
@@ -18,7 +18,6 @@ Bot.on('ready', () => {
 Bot.on('message', (msg : Message) => {
   //Lets server restrict
   CommandParser(msg);
-
   if(msg.channel instanceof TextChannel) {
     if(msg.channel.parent.name == "ArcRoleplaying") {
     }
@@ -37,6 +36,11 @@ Bot.on('guildMemberAdd', member => {
   targetChannel.send(member,welcomeMessage);
 })
 
+Bot.on('messageReactionAdd', (msgReaction : MessageReaction, user : User) => {
+
+  
+})
+
 Bot.on('guildMemberRemove', member => {
   let leaveMessage = new RichEmbed();
   leaveMessage.setAuthor(`Bye, ${member.user.username}!`, member.user.avatarURL);
@@ -48,4 +52,4 @@ Bot.on('guildMemberRemove', member => {
   targetChannel.send(leaveMessage);
 })
 
-Bot.login("NDM2MDUwNDc1OTQ3NjU1MTc4.XUXrUw.voePsneELAANNkVS6MgU1jGdyFM");
+Bot.login("NDM2MDUwNDc1OTQ3NjU1MTc4.XUXs5Q.hU_9w4BT5XqhhM2wRk3Jg6pBoVM");

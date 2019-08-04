@@ -1,4 +1,6 @@
-import { Ping, Clear } from "./generalCommands";
+import { Ping, Clear, InitlizeUser, Help } from "./generalCommands";
+import "reflect-metadata";
+
 import {
   ICommandManager,
   parseStatus,
@@ -17,7 +19,7 @@ import { ProfilePicture, BotColor, Bot, AdminRole } from "..";
 
 export let CommandManager: ICommandManager = {
   prefix: "!",
-  commandList: [Ping, Clear],
+  commandList: [Ping, Clear, InitlizeUser, Help],
   permError: (
     channel: TextChannel | DMChannel | GroupDMChannel,
     target: User
@@ -156,6 +158,5 @@ export let CommandParser = (msg: Message) => {
   else {
     status = parseStatus.incorrectPrefx;
   }
-  console.log(status);
   return status;
 };
