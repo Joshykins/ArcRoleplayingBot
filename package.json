@@ -4,15 +4,19 @@
   "description": "A roleplay bot for discord",
   "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "nodemon"
   },
   "author": "Josh R",
   "license": "ISC",
   "dependencies": {
     "@types/node": "^12.6.8",
     "discord.js": "^11.5.1",
+    "dotenv": "^8.2.0",
     "mysql": "^2.17.1",
+    "nodemon": "^2.0.6",
     "reflect-metadata": "^0.1.13",
-    "typeorm": "^0.2.18"
+    "ts-node": "^9.1.1",
+    "typeorm": "^0.2.18",
+    "typescript": "^4.1.3"
   }
 }

@@ -15,8 +15,8 @@ import {
   DMChannel,
   GroupDMChannel
 } from "discord.js";
-import { ProfilePicture, BotColor, Bot, AdminRole } from "..";
-
+import { discordBotConfig } from "../util/enviromentalVariables";
+import { Bot } from '../index'
 export let CommandManager: ICommandManager = {
   prefix: "!",
   commandList: [Ping, Clear, InitlizeUser, Help],
@@ -106,7 +106,7 @@ export let CommandParser = (msg: Message) => {
       .split(" ")[0]
       .toLowerCase();
     let commandFound: boolean = false;
-    let isAdmin: boolean = msg.member.roles.has(AdminRole);
+    let isAdmin: boolean = msg.member.roles.has(discordBotConfig.adminRole);
     for (let i = 0; i < CommandManager.commandList.length; i++) {
       let commandName: string = CommandManager.commandList[
         i
@@ -150,7 +150,7 @@ export let CommandParser = (msg: Message) => {
       helpMessage.setDescription(
         "The command can be used to tell you about other commands by doing \n `!help CommandName`. \n \n It will print out a list of commands by doing !help."
       );
-      helpMessage.setColor(BotColor);
+      helpMessage.setColor(discordBotConfig.color);
       msg.channel.send(helpMessage);
       status = parseStatus.commandNotFound;
     }

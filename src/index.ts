@@ -1,15 +1,8 @@
 const Discord = require('discord.js');
-import {Client, Message, TextChannel, MessageEmbedProvider, GuildChannel, RichEmbed, MessageReaction} from 'discord.js';
+import {Client, Message, TextChannel, MessageEmbedProvider, GuildChannel, RichEmbed, MessageReaction, User} from 'discord.js';
 import {CommandManager, CommandParser} from "./commands/commands";
 export const Bot = new Client;
-
-
-
-export const BotColor = 0x3c50ff;
-export const BotId = "436050475947655178";
-export const ProfilePicture : string = "http://www.womenfitness.net/wp/wp-content/uploads/2016/07/rubyro-1-500x500.jpg";
-export const NotificationsChannel : string = "607132389243748382";
-export const AdminRole : string = "607162419147702283";
+import { discordBotConfig }from "./util/enviromentalVariables";
 
 Bot.on('ready', () => {
   console.log(`Logged in as ${Bot.user.tag}!`);
@@ -29,9 +22,9 @@ Bot.on('guildMemberAdd', member => {
   welcomeMessage.setAuthor(`Hello, ${member.user.username}!`, member.user.avatarURL);
   welcomeMessage.setTitle(`Welcome to **${member.guild.name}**, Live long and prosper!`);
   welcomeMessage.setDescription(`This server uses the Arc Roleplaying Enviroment by Sero Enterprises#0001, if you are new to using Arc Roleplaying get started by typing !info.`);
-  welcomeMessage.setColor(BotColor);
+  welcomeMessage.setColor(discordBotConfig.color);
   welcomeMessage.timestamp = new Date();
-  let targetChannel : any = member.guild.channels.get(NotificationsChannel);
+  let targetChannel : any = member.guild.channels.get(discordBotConfig.notificationsChannel);
   //Had to do this to get rid of typing error, even though GuildChannel.send works??
   targetChannel.send(member,welcomeMessage);
 })
@@ -45,11 +38,11 @@ Bot.on('guildMemberRemove', member => {
   let leaveMessage = new RichEmbed();
   leaveMessage.setAuthor(`Bye, ${member.user.username}!`, member.user.avatarURL);
   leaveMessage.setTitle(`**${member.guild.name}** and I will miss you dearly!`);
-  leaveMessage.setColor(BotColor);
+  leaveMessage.setColor(discordBotConfig.color);
   leaveMessage.timestamp = new Date();
-  let targetChannel : any = member.guild.channels.get(NotificationsChannel);
+  let targetChannel : any = member.guild.channels.get(discordBotConfig.notificationsChannel);
   //Had to do this to get rid of typing error, even though GuildChannel.send works??
   targetChannel.send(leaveMessage);
 })
 
-Bot.login("NDM2MDUwNDc1OTQ3NjU1MTc4.XUXs5Q.hU_9w4BT5XqhhM2wRk3Jg6pBoVM");
+Bot.login(discordBotConfig.token);
