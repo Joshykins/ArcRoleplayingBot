@@ -134,20 +134,22 @@ export const Help: ICommand = {
         msg.reply(HelpMessage);
       }
     } else {
-      let commandFound = false;
-      let command : ICommand;
+      let commandName:string;
+
       CommandManager.commandList.forEach(command => {
         if(argv[1] && argv[1].toLowerCase() == command.command.toLowerCase()) {
-          command = command;
-          commandFound = true;
+          commandName = command.command;
+          
         }
       })
-      if(commandFound) {
-        CommandManager.printCommandHelpPage(msg.channel, command.command);
+      if(commandName) {
+        CommandManager.printCommandHelpPage(msg.channel, commandName.toLowerCase());
       }
       else {
         CommandManager.printCommandHelpPage(msg.channel, "help");
       }
+      
+
     }
   }
 };

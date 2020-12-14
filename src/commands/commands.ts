@@ -19,9 +19,10 @@ import { discordBotConfig } from "../util/enviromentalVariables";
 import { Bot } from '../index'
 import { InitServer } from "./debugCommands";
 import { SetNotificationsChannel } from "./adminCommands";
+import { CharacterSetField, CreateCharacter, ListCharacters, RemoveCharacter } from "./characterCommands";
 export let CommandManager: ICommandManager = {
   prefix: discordBotConfig.customPrefix,
-  commandList: [Ping, Pong, Clear, Help, InitServer, SetNotificationsChannel],
+  commandList: [Ping, Pong, Clear, Help, InitServer, SetNotificationsChannel, CreateCharacter, RemoveCharacter, ListCharacters, CharacterSetField],
   printHelp: (
     channel: TextChannel | DMChannel | GroupDMChannel,
     title: string,

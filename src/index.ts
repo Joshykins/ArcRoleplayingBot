@@ -1,7 +1,7 @@
 import {Client, Message, TextChannel, RichEmbed, MessageReaction, User} from 'discord.js';
 import { setupCommandEvents } from './commands/commandEvents';
 import { CommandParser} from "./commands/commands";
-import { botDB } from './models';
+import { botDB } from './models/connectionSetup';
 import { discordBotConfig }from "./util/enviromentalVariables";
 export const Bot = new Client;
 
