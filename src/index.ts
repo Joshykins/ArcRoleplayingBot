@@ -1,48 +1,37 @@
-const Discord = require('discord.js');
-import {Client, Message, TextChannel, MessageEmbedProvider, GuildChannel, RichEmbed, MessageReaction, User} from 'discord.js';
-import {CommandManager, CommandParser} from "./commands/commands";
-export const Bot = new Client;
+import {Client, Message, TextChannel, RichEmbed, MessageReaction, User} from 'discord.js';
+import { setupCommandEvents } from './commands/commandEvents';
+import { CommandParser} from "./commands/commands";
+import { botDB } from './models';
 import { discordBotConfig }from "./util/enviromentalVariables";
+export const Bot = new Client;
 
-Bot.on('ready', () => {
-  console.log(`Logged in as ${Bot.user.tag}!`);
-})
 
-Bot.on('message', (msg : Message) => {
-  //Lets server restrict
-  CommandParser(msg);
-  if(msg.channel instanceof TextChannel) {
-    if(msg.channel.parent.name == "ArcRoleplaying") {
-    }
+setupCommandEvents();
+
+//connect to DB then login
+botDB().then(async res => {
+  if(res) {
+    await Bot.login(discordBotConfig.token);
+    console.log(Bot.eventNames());
+    console.log("\x1b[0m",`
+     _    ___   ___     ___  ___  
+    /_\\  | _ \\ / __|   | _ \\| _ \\ 
+   / _ \\ |   /| (__    |   /|  _/ 
+  /_/ \\_\\|_|_\\ \\___|   |_|_\\|_|   
+
+  _____________________________________________________________________________
+
+    ___  _____  __    ___   ___   __     ___       ___    ___  _____ 
+   /   \\ \\_   \\/ _\\  / __\\ /___\\ /__\\   /   \\     / __\\  /___\\/__   \\
+  / /\\ /  / /\\/\\ \\  / /   //  /// \\//  / /\\ /    /__\\// //  //  / /\\/
+ / /_///\\/ /_  _\\ \\/ /___/ \\_/// _  \\ / /_//    / \\/  \\/ \\_//  / /   
+/___,' \\____/  \\__/\\____/\\___/ \\/ \\_//___,'     \\_____/\\___/   \\/    
+                                                                    
+
+    `)
+    console.log("\x1b[34m","[ Application started Successfully ] \n ","\x1b[0m");
+  }
+  else {
+    console.error("\x1b[31m","[ Application Failed to connect to Mongo] \n ","\x1b[0m");
   }
 })
-
-Bot.on('guildMemberAdd', member => {
-  let welcomeMessage = new RichEmbed();
-  welcomeMessage.setAuthor(`Hello, ${member.user.username}!`, member.user.avatarURL);
-  welcomeMessage.setTitle(`Welcome to **${member.guild.name}**, Live long and prosper!`);
-  welcomeMessage.setDescription(`This server uses the Arc Roleplaying Enviroment by Sero Enterprises#0001, if you are new to using Arc Roleplaying get started by typing !info.`);
-  welcomeMessage.setColor(discordBotConfig.color);
-  welcomeMessage.timestamp = new Date();
-  let targetChannel : any = member.guild.channels.get(discordBotConfig.notificationsChannel);
-  //Had to do this to get rid of typing error, even though GuildChannel.send works??
-  targetChannel.send(member,welcomeMessage);
-})
-
-Bot.on('messageReactionAdd', (msgReaction : MessageReaction, user : User) => {
-
-  
-})
-
-Bot.on('guildMemberRemove', member => {
-  let leaveMessage = new RichEmbed();
-  leaveMessage.setAuthor(`Bye, ${member.user.username}!`, member.user.avatarURL);
-  leaveMessage.setTitle(`**${member.guild.name}** and I will miss you dearly!`);
-  leaveMessage.setColor(discordBotConfig.color);
-  leaveMessage.timestamp = new Date();
-  let targetChannel : any = member.guild.channels.get(discordBotConfig.notificationsChannel);
-  //Had to do this to get rid of typing error, even though GuildChannel.send works??
-  targetChannel.send(leaveMessage);
-})
-
-Bot.login(discordBotConfig.token);

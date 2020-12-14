@@ -1,4 +1,4 @@
-import { Ping, Clear, InitlizeUser, Help, Pong } from "./generalCommands";
+import { Ping, Clear, Help, Pong } from "./generalCommands";
 import "reflect-metadata";
 
 import {
@@ -17,14 +17,11 @@ import {
 } from "discord.js";
 import { discordBotConfig } from "../util/enviromentalVariables";
 import { Bot } from '../index'
+import { InitServer } from "./debugCommands";
+import { SetNotificationsChannel } from "./adminCommands";
 export let CommandManager: ICommandManager = {
-<<<<<<< HEAD
-  prefix: "!",
-  commandList: [Ping, Clear, InitlizeUser, Help, Pong],
-=======
   prefix: discordBotConfig.customPrefix,
-  commandList: [Ping, Clear, InitlizeUser, Help],
->>>>>>> b6db3cfdbb00bd5eb42160ff2945df765a3964ee
+  commandList: [Ping, Pong, Clear, Help, InitServer, SetNotificationsChannel],
   printHelp: (
     channel: TextChannel | DMChannel | GroupDMChannel,
     title: string,
@@ -59,7 +56,7 @@ export let CommandManager: ICommandManager = {
   ) => {
     for (let i = 0; i < CommandManager.commandList.length; i++) {
       let pickedCmd: ICommand = CommandManager.commandList[i];
-      if (pickedCmd.command == targetCommand) {
+      if (pickedCmd.command.toLowerCase() == targetCommand.toLowerCase()) {
         let HelpMessage = new RichEmbed();
         HelpMessage.setAuthor(
           `${Bot.user.username} is giving assistance!`,
@@ -71,17 +68,11 @@ export let CommandManager: ICommandManager = {
           }${pickedCmd.command.toLowerCase()}**.`
         );
         HelpMessage.setColor(discordBotConfig.color);
-        HelpMessage.addField(
-          `${
-            CommandManager.prefix
-          }${pickedCmd.command.toLowerCase()} Permission Required`,
+        HelpMessage.addField(`| Permission Required |`,
           pickedCmd.permissionLevel == 0 ? "User" : "Admin",
           false
         );
-        HelpMessage.addField(
-          `${
-            CommandManager.prefix
-          }${pickedCmd.command.toLowerCase()} Description`,
+        HelpMessage.addField(`\u200B| Description |`,
           pickedCmd.description,
           false
         );
@@ -98,16 +89,14 @@ export let CommandManager: ICommandManager = {
             }
           });
         }
-        HelpMessage.addField(`Syntax`, syntaxInput, true);
+        HelpMessage.addField(`\u200B| Syntax |`, syntaxInput, true);
         if (pickedCmd.examples) {
+          let exampleText = ``
           pickedCmd.examples.forEach((elem, i) => {
-            HelpMessage.addField(
-              `Example ${i + 1}`,
-              `${elem.exampleDesc} \n${
-                CommandManager.prefix
-              }${pickedCmd.command.toLowerCase()} ${elem.example}`
-            );
+            exampleText += ` \u2022 ${elem.example} \n ${elem.exampleDesc} \n\n`;
           });
+          
+          HelpMessage.addField( '\u200B\u200B| Examples Below |', exampleText );
         }
         channel.send(HelpMessage);
         return;
@@ -126,7 +115,12 @@ export let CommandParser = (msg: Message) => {
       .split(" ")[0]
       .toLowerCase();
     let commandFound: boolean = false;
-    let isAdmin: boolean = msg.member.roles.has(discordBotConfig.adminRole);
+
+    //Find if admin
+    let isAdmin: boolean = msg.author.id == msg.guild.ownerID || 
+    msg.member.roles.find(role => role.hasPermission('ADMINISTRATOR')) ? true : false;
+
+
     for (let i = 0; i < CommandManager.commandList.length; i++) {
       let commandName: string = CommandManager.commandList[
         i

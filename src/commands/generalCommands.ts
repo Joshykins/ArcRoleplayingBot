@@ -2,7 +2,7 @@ import { Message, RichEmbed } from "discord.js";
 import { ICommand, permissionLevel } from "./commandsTypings";
 import { CommandManager } from "./commands";
 import { Bot } from "..";
-import { User } from "../entities/User";
+import { discordBotConfig } from "../util/enviromentalVariables";
 
 export const Ping: ICommand = {
   permissionLevel: permissionLevel.user,
@@ -15,7 +15,7 @@ export const Ping: ICommand = {
         "Will reply to your message with it's unrestricted interest in playing pong."
     }
   ],
-  action(argv: string[], user: string, msg: Message) {
+  async action(argv: string[], user: string, msg: Message) {
     //Wow something cool happens here!
     msg.reply("Lets play pong!");
   }
@@ -33,7 +33,7 @@ export const Pong: ICommand = {
         "Will reply to your message with it's unrestricted interest in playing ping."
     }
   ],
-  action(argv: string[], user: string, msg: Message) {
+  async action(argv: string[], user: string, msg: Message) {
     //Wow something cool happens here!
     msg.reply("Lets play ping, big boy!");
   }
@@ -50,7 +50,7 @@ export const Clear: ICommand = {
     }
   ],
   permissionLevel: permissionLevel.admin,
-  action(argv: string[], user: string, msg: Message) {
+  async action(argv: string[], user: string, msg: Message) {
     //Wow something cool happens here!
     if (parseInt(argv[1])) {
       let messageCountToDelete: number;
@@ -92,11 +92,11 @@ export const Help: ICommand = {
     }
   ],
   permissionLevel: permissionLevel.user,
-  action(argv: string[], user: string, msg: Message) {
+  async action(argv: string[], user: string, msg: Message) {
     if (parseInt(argv[1])) {
       let pageIndex = parseInt(argv[1]);
       let commands: string[] = [];
-      let paginationNumb: number = 1;
+      let paginationNumb: number = 4;
       let pageBefore: boolean = false;
       let pageAfter: boolean = false;
       let HelpMessage = new RichEmbed();
@@ -105,7 +105,7 @@ export const Help: ICommand = {
         Bot.user.avatarURL
       );
       HelpMessage.setTitle(`Displaying help page ${pageIndex}.`);
-      HelpMessage.setColor(0xff0000);
+      HelpMessage.setColor(discordBotConfig.color);
       if(CommandManager.commandList[(pageIndex - 1) * paginationNumb]) {
         //Page exists    
         CommandManager.commandList.forEach((elem, i) => {
@@ -126,14 +126,7 @@ export const Help: ICommand = {
             pageAfter = true;
           }
         });
-        msg.reply(HelpMessage).then((embed : Message)=> {
-          if(pageBefore) {
-            embed.react("◀");
-          }
-          if(pageAfter) {
-            embed.react("▶");
-          }
-        });
+        msg.reply(HelpMessage);
       }
       else {
         HelpMessage.setDescription("Invalid Page Number");
@@ -141,26 +134,20 @@ export const Help: ICommand = {
         msg.reply(HelpMessage);
       }
     } else {
+      let commandFound = false;
+      let command : ICommand;
       CommandManager.commandList.forEach(command => {
-        if(argv[1] == command.command.toLowerCase()) {
-          CommandManager.printCommandHelpPage(msg.channel, command.command);
-          return;
+        if(argv[1] && argv[1].toLowerCase() == command.command.toLowerCase()) {
+          command = command;
+          commandFound = true;
         }
       })
-      CommandManager.printHelp(msg.channel, "WHOOPS!", `The command '${argv[1] }' is not found!`);
+      if(commandFound) {
+        CommandManager.printCommandHelpPage(msg.channel, command.command);
+      }
+      else {
+        CommandManager.printCommandHelpPage(msg.channel, "help");
+      }
     }
-  }
-};
-
-export const InitlizeUser: ICommand = {
-  command: "inituser",
-  permissionLevel: permissionLevel.user,
-  action(argv: string[], user: string, msg: Message) {
-    let newUser = new User();
-    newUser.id = parseInt(user);
-    newUser.username = msg.author.username;
-    newUser.save().catch(err => {
-      console.log(err);
-    });
   }
 };

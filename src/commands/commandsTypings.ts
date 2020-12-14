@@ -6,7 +6,7 @@ export interface ICommand {
   syntax?: {syntaxName : string, optional: boolean}[]; //Syntax, each index contains syntax for that position of the command's arguements
   examples?: {exampleDesc : string, example: string}[];
   permissionLevel: permissionLevel;
-  action : (argv: string[], user: string, msg: Message)=>void;
+  action : (argv: string[], user: string, msg: Message) => Promise<void>;
 }
 
 export enum parseStatus { commandNotFound = 0, incorrectPrefx = 1, commandRan = 2 }
@@ -18,5 +18,5 @@ export interface ICommandManager {
   commandList: ICommand[];
   permError: (channel: TextChannel | DMChannel | GroupDMChannel, target: User)=> void;
   printCommandHelpPage: (channel: TextChannel | DMChannel | GroupDMChannel, targetCommand : string) => void;
-  printHelp: (channel: TextChannel | DMChannel | GroupDMChannel, title: string, msg: string) => void;
+  printHelp: (channel: TextChannel | DMChannel | GroupDMChannel, title: string, msg?: string) => void;
 }
