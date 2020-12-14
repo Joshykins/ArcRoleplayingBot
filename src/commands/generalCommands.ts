@@ -21,6 +21,24 @@ export const Ping: ICommand = {
   }
 };
 
+//Pong Command for Sero
+export const Pong: ICommand = {
+  permissionLevel: permissionLevel.user,
+  command: "Pong",
+  description: "Plays ping with a pong",
+  examples: [
+    {
+      example: "!pong",
+      exampleDesc:
+        "Will reply to your message with it's unrestricted interest in playing ping."
+    }
+  ],
+  action(argv: string[], user: string, msg: Message) {
+    //Wow something cool happens here!
+    msg.reply("Lets play ping, big boy!");
+  }
+};
+
 export const Clear: ICommand = {
   command: "Clear",
   description: "Clears the current chat of up to 100 messages.",

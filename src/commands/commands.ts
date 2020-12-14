@@ -1,4 +1,4 @@
-import { Ping, Clear, InitlizeUser, Help } from "./generalCommands";
+import { Ping, Clear, InitlizeUser, Help, Pong } from "./generalCommands";
 import "reflect-metadata";
 
 import {
@@ -19,7 +19,7 @@ import { discordBotConfig } from "../util/enviromentalVariables";
 import { Bot } from '../index'
 export let CommandManager: ICommandManager = {
   prefix: "!",
-  commandList: [Ping, Clear, InitlizeUser, Help],
+  commandList: [Ping, Clear, InitlizeUser, Help, Pong],
   printHelp: (
     channel: TextChannel | DMChannel | GroupDMChannel,
     title: string,
