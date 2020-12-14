@@ -12,7 +12,6 @@ setupCommandEvents();
 botDB().then(async res => {
   if(res) {
     await Bot.login(discordBotConfig.token);
-    console.log(Bot.eventNames());
     console.log("\x1b[0m",`
      _    ___   ___     ___  ___  
     /_\\  | _ \\ / __|   | _ \\| _ \\ 
