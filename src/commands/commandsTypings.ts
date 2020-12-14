@@ -17,5 +17,6 @@ export interface ICommandManager {
   prefix: string;
   commandList: ICommand[];
   permError: (channel: TextChannel | DMChannel | GroupDMChannel, target: User)=> void;
-  printHelp: (channel: TextChannel | DMChannel | GroupDMChannel, targetCommand : string) => void;
+  printCommandHelpPage: (channel: TextChannel | DMChannel | GroupDMChannel, targetCommand : string) => void;
+  printHelp: (channel: TextChannel | DMChannel | GroupDMChannel, title: string, msg: string) => void;
 }

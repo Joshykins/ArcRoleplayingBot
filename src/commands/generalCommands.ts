@@ -47,7 +47,7 @@ export const Clear: ICommand = {
         console.log(err);
       });
     } else {
-      CommandManager.printHelp(msg.channel, Clear.command);
+      CommandManager.printCommandHelpPage(msg.channel, Clear.command);
     }
   }
 };
@@ -118,13 +118,18 @@ export const Help: ICommand = {
         });
       }
       else {
-        //page doesnt exist
         HelpMessage.setDescription("Invalid Page Number");
           
         msg.reply(HelpMessage);
       }
     } else {
-      msg.reply("pg was empty noob");
+      CommandManager.commandList.forEach(command => {
+        if(argv[1] == command.command.toLowerCase()) {
+          CommandManager.printCommandHelpPage(msg.channel, command.command);
+          return;
+        }
+      })
+      CommandManager.printHelp(msg.channel, "WHOOPS!", `The command '${argv[1] }' is not found!`);
     }
   }
 };

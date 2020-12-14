@@ -20,6 +20,21 @@ import { Bot } from '../index'
 export let CommandManager: ICommandManager = {
   prefix: "!",
   commandList: [Ping, Clear, InitlizeUser, Help],
+  printHelp: (
+    channel: TextChannel | DMChannel | GroupDMChannel,
+    title: string,
+    msg: string
+  ) => {
+    let HelpMessage = new RichEmbed();
+    HelpMessage.setAuthor(
+      `${Bot.user.username} is giving assistance!`,
+      Bot.user.avatarURL
+    );
+    HelpMessage.setTitle(`${title}`);
+    HelpMessage.setDescription(`${msg}`);
+    HelpMessage.setColor(0xff0000);
+    channel.send(HelpMessage);
+  },
   permError: (
     channel: TextChannel | DMChannel | GroupDMChannel,
     target: User
@@ -33,7 +48,7 @@ export let CommandManager: ICommandManager = {
     HelpMessage.setColor(0xff0000);
     channel.send(target, HelpMessage);
   },
-  printHelp: (
+  printCommandHelpPage: (
     channel: TextChannel | DMChannel | GroupDMChannel,
     targetCommand: string
   ) => {
@@ -50,7 +65,7 @@ export let CommandManager: ICommandManager = {
             CommandManager.prefix
           }${pickedCmd.command.toLowerCase()}**.`
         );
-        HelpMessage.setColor(0xff0000);
+        HelpMessage.setColor(discordBotConfig.color);
         HelpMessage.addField(
           `${
             CommandManager.prefix

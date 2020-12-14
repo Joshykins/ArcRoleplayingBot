@@ -5,16 +5,20 @@ interface DiscordBotConfig {
     notificationsChannel: string,
     adminRole: string
 }
+
 //Enviromental Variables
 import * as dotenv from "dotenv";
 
 dotenv.config();
+
+
 
 //Color type import
 let processColor : any = process.env.BOT_COLOR;
 if(processColor) {
     processColor = Number(processColor);
 }
+
 export const discordBotConfig : DiscordBotConfig = {
     token: process.env.BOT_TOKEN,
     color: processColor || 0x3c50ff,
