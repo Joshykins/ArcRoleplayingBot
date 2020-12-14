@@ -3,7 +3,8 @@ interface DiscordBotConfig {
     color: number,
     profilePic: string,
     notificationsChannel: string,
-    adminRole: string
+    adminRole: string,
+    customPrefix: string, 
 }
 
 //Enviromental Variables
@@ -24,5 +25,6 @@ export const discordBotConfig : DiscordBotConfig = {
     color: processColor || 0x3c50ff,
     profilePic:"http://www.womenfitness.net/wp/wp-content/uploads/2016/07/rubyro-1-500x500.jpg",
     notificationsChannel: "607132389243748382",
-    adminRole: "607162419147702283"
+    adminRole: "607162419147702283",
+    customPrefix: process.env.CUSTOM_PREFIX || "!"
 } 

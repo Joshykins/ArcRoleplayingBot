@@ -18,8 +18,13 @@ import {
 import { discordBotConfig } from "../util/enviromentalVariables";
 import { Bot } from '../index'
 export let CommandManager: ICommandManager = {
+<<<<<<< HEAD
   prefix: "!",
   commandList: [Ping, Clear, InitlizeUser, Help, Pong],
+=======
+  prefix: discordBotConfig.customPrefix,
+  commandList: [Ping, Clear, InitlizeUser, Help],
+>>>>>>> b6db3cfdbb00bd5eb42160ff2945df765a3964ee
   printHelp: (
     channel: TextChannel | DMChannel | GroupDMChannel,
     title: string,
@@ -160,10 +165,10 @@ export let CommandParser = (msg: Message) => {
         msg.author.avatarURL
       );
       helpMessage.setTitle(
-        "Sorry command not found! Try the **!help** command!"
+        `Sorry command not found! Try the **${discordBotConfig.customPrefix}help** command!`
       );
       helpMessage.setDescription(
-        "The command can be used to tell you about other commands by doing \n `!help CommandName`. \n \n It will print out a list of commands by doing !help."
+        `The command can be used to tell you about other commands by doing \n \`${discordBotConfig.customPrefix}help CommandName\`. \n \n It will print out a list of commands by doing !help.`
       );
       helpMessage.setColor(discordBotConfig.color);
       msg.channel.send(helpMessage);
