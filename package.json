@@ -4,6 +4,7 @@
   "description": "A roleplay bot for discord",
   "main": "src/index.js",
   "scripts": {
+    "start": "nodemon",
     "test": "nodemon"
   },
   "author": "Josh R",

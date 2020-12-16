@@ -10,13 +10,13 @@ export const SetNotificationsChannel: ICommand = {
   description: "Gets or Sets the notification channel that will be used for all bot notifcations.",
   examples: [
     {
-      example: discordBotConfig.customPrefix+"notifychannel #notifications-channel",
+      example: "notifychannel #notifications-channel",
       exampleDesc:
         "This will set the notification channel to #notifications-channel."
     },
     {
         
-      example: discordBotConfig.customPrefix+"notifychannel",
+      example: "notifychannel",
       exampleDesc:
         "This will get the current notification channel."
     }

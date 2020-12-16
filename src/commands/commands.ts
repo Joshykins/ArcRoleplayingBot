@@ -19,10 +19,31 @@ import { discordBotConfig } from "../util/enviromentalVariables";
 import { Bot } from '../index'
 import { InitServer } from "./debugCommands";
 import { SetNotificationsChannel } from "./adminCommands";
-import { CharacterSetField, CreateCharacter, ListCharacters, RemoveCharacter } from "./characterCommands";
+import { CharacterSetField, CreateCharacter, GetCharacter, ListCharacters, RemoveCharacter } from "./characterCommands";
+import { CreateDefaultCharacterField, ListDefaultCharacterFields, RemoveDefaultCharacterField } from "./adminCharacterCommands";
 export let CommandManager: ICommandManager = {
   prefix: discordBotConfig.customPrefix,
-  commandList: [Ping, Pong, Clear, Help, InitServer, SetNotificationsChannel, CreateCharacter, RemoveCharacter, ListCharacters, CharacterSetField],
+  commandList: [
+    //Debug
+    InitServer,
+    //Admin
+    SetNotificationsChannel,
+    //General
+    Ping, 
+    Pong, 
+    Clear, 
+    Help,  
+    //Admin Character
+    ListDefaultCharacterFields,
+    RemoveDefaultCharacterField,
+    CreateDefaultCharacterField,
+    //Character
+    CreateCharacter, 
+    RemoveCharacter, 
+    ListCharacters, 
+    CharacterSetField, 
+    GetCharacter
+  ],
   printHelp: (
     channel: TextChannel | DMChannel | GroupDMChannel,
     title: string,
@@ -94,7 +115,7 @@ export let CommandManager: ICommandManager = {
         if (pickedCmd.examples) {
           let exampleText = ``
           pickedCmd.examples.forEach((elem, i) => {
-            exampleText += ` \u2022 ${elem.example} \n ${elem.exampleDesc} \n\n`;
+            exampleText += `${discordBotConfig.customPrefix}${pickedCmd.command} ${elem.example} \n ${elem.exampleDesc} \n\n`;
           });
           
           HelpMessage.addField( '\u200B\u200B| Examples Below |', exampleText );

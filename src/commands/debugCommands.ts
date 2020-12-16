@@ -6,18 +6,16 @@ import { initializeServer } from "../resources/initializeServer";
 
 export const InitServer: ICommand = {
   permissionLevel: permissionLevel.admin,
-  command: "initServer",
-  description: "Inits a server",
+  command: "ResetServer",
+  description: "Resets the server to default values, removes all server data.",
   examples: [
     {
-      example: "!initServer",
+      example: "",
       exampleDesc:
-        "Will init the server to the db."
+        "Will reset the server"
     }
   ],
   async action(argv: string[], user: string, msg: Message) {
-    //Wow something cool happens here!
-    msg.reply("STUFF BEING DONE!");
     initializeServer(msg.guild).then(serverMsg => {
       msg.reply(serverMsg);
     });

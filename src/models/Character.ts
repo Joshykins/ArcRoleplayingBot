@@ -1,16 +1,16 @@
 import { model, Schema, Model, Document } from 'mongoose';
+import { CharacterField } from './CharacterField';
 
+
+//TODO: ADD BEAUTIFULNESS TO DEFAULT DYNAMICALLY(NOT STATIC) FIELD FOR TEST FIELD
 
 export interface ICharacter extends Document {
     name: string,
-    outwardAge: string,
-    origin: string,
-    race: string,
-    sex: string,
-    height: string,
-    beautifulness: string,
     description: string,
     image: string,
+    
+    //
+    additionalFields: CharacterField[]
     
 
     //Additional Fields from Creation Process
@@ -22,16 +22,12 @@ export interface ICharacter extends Document {
 
 const CharacterSchema: Schema = new Schema({
     name: {type: String, required: false},
-    outwardAge: {type: String, required: false},
-    origin: {type: String, required: false},
-    race: {type: String, required: false},
-    sex: {type: String, required: false},
-    height: {type: String, required: false},
-    beautifulness: {type: String, required: false},
     description: {type: String, required: false},
     image: {type: String, required: false},
+    //Additional Fields
+    additionalFields: {type: Array, required: false},
 
-    //Additional Fields from Creation Process
+    //Application-Required Fields
     referenceName: {type: String, required: true},
     ownerId: {type: String, required: true},
     serverId: {type: String, required: true},

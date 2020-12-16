@@ -13,7 +13,7 @@ export const CreateCharacter: ICommand = {
     description: "Creates a new character with the specified reference id.",
     examples:[
         {
-            example: discordBotConfig.customPrefix+"CreateCharacter bobross",
+            example: "CreateCharacter bobross",
             exampleDesc: "Creates a new character with the identifier of 'bobross'. The identifier will be used to reference the character when updating or deleting it."
         }
     ],
@@ -48,7 +48,8 @@ export const CreateCharacter: ICommand = {
             const character : ICharacter = new Character({
                 referenceName: argv[1],
                 ownerId: msg.author.id,
-                serverId: msg.guild.id
+                serverId: msg.guild.id,
+                'customfield': "test123GOD"
             })
 
             character.save();
@@ -71,7 +72,7 @@ export const RemoveCharacter: ICommand = {
     description: "Remove a character with the specified reference id.",
     examples:[
         {
-            example: discordBotConfig.customPrefix+"RemoveCharacter bobross",
+            example: "RemoveCharacter bobross",
             exampleDesc: "Removes a character with the identifier of 'bobross'."
     }
     ],
@@ -121,7 +122,7 @@ export const ListCharacters: ICommand = {
     description: "List all characters with their name and identifier.",
     examples:[
         {
-            example: discordBotConfig.customPrefix+"ListCharacters",
+            example: "ListCharacters",
             exampleDesc: "Lists all the characters stored for the server, with their names and identifiers."
         }
     ],
@@ -162,39 +163,39 @@ export const CharacterSetField: ICommand = {
     description: "Sets a field of the character.",
     examples:[
         {
-            example: discordBotConfig.customPrefix+"setcharacterfield {identifier} name Basil V. Sterling",
+            example: "setcharacterfield {identifier} name Basil V. Sterling",
             exampleDesc: "Sets a characters name."
         },
         {
-            example: discordBotConfig.customPrefix+"setcharacterfield {identifier} outwardage 20s",
+            example: "setcharacterfield {identifier} outwardage 20s",
             exampleDesc: "Sets a character's outward age."
         },
         {
-            example: discordBotConfig.customPrefix+"setcharacterfield {identifier} origin Kaziria",
+            example: "setcharacterfield {identifier} origin Kaziria",
             exampleDesc: "Sets a character's origin."
         },
         {
-            example: discordBotConfig.customPrefix+"setcharacterfield {identifier} race Elf",
+            example: "setcharacterfield {identifier} race Elf",
             exampleDesc: "Sets a character's race."
         },
         {
-            example: discordBotConfig.customPrefix+"setcharacterfield {identifier} sex Female",
+            example: "setcharacterfield {identifier} sex Female",
             exampleDesc: "Sets a character's sex."
         },
         {
-            example: discordBotConfig.customPrefix+"setcharacterfield {identifier} height 6'6\"",
+            example: "setcharacterfield {identifier} height 6'6\"",
             exampleDesc: "Sets a character's height."
         },
         {
-            example: discordBotConfig.customPrefix+"setcharacterfield {identifier} beautifulness 10\"",
+            example:"{identifier} beautifulness 10\"",
             exampleDesc: "Sets a character's beautifulness."
         },
         {
-            example: discordBotConfig.customPrefix+"setcharacterfield {identifier} description A lushus elven queen.",
+            example: "setcharacterfield {identifier} description A lushus elven queen.",
             exampleDesc: "Sets a character's description."
         },
         {
-            example: discordBotConfig.customPrefix+"setcharacterfield {identifier} image media.discordapp.net/attachments/688652229669945354/732683076190208010/brocktherock.png",
+            example: "setcharacterfield {identifier} image media.discordapp.net/attachments/688652229669945354/732683076190208010/brocktherock.png",
             exampleDesc: "Sets a character's image."
         }
         
@@ -253,30 +254,6 @@ export const CharacterSetField: ICommand = {
                     character.update({name: remainderString}).exec();
                     msg.reply("Character Updated!");
                     break;
-                case "outwardage":
-                    character.update({outwardAge: remainderString}).exec();
-                    msg.reply("Character Updated!");
-                    break;
-                case "origin":
-                    character.update({origin: remainderString}).exec();
-                    msg.reply("Character Updated!");
-                    break;
-                case "race":
-                    character.update({race: remainderString}).exec();
-                    msg.reply("Character Updated!");
-                    break;
-                case "sex":
-                    character.update({sex: remainderString}).exec();
-                    msg.reply("Character Updated!");
-                    break;
-                case "height":
-                    character.update({height: remainderString}).exec();
-                    msg.reply("Character Updated!");
-                    break;
-                case "beautifulness":
-                    character.update({beautifulness: remainderString}).exec();
-                    msg.reply("Character Updated!");
-                    break;
                 case "description":
                     character.update({description: remainderString}).exec();
                     msg.reply("Character Updated!");
@@ -299,4 +276,67 @@ export const CharacterSetField: ICommand = {
         
     }
 
+}
+
+
+
+export const GetCharacter: ICommand = {
+    permissionLevel: permissionLevel.user,
+    command: "GetCharacter",
+    description: "Gets a character with the specified reference id.",
+    examples:[
+        {
+            example: "bobross",
+            exampleDesc: "Gets a character with the identifier of 'bobross'."
+    }
+    ],
+    syntax: [
+        {
+            syntaxName: "identifier",
+            optional: false
+        }
+    ],
+    async action(argv: string[], user: string, msg: Message) {
+        //Check if chara exists
+        if(!argv[1]) {
+            msg.reply("Provide an identifier.");
+            return;
+        }
+
+        try {
+            const character = await Character.findOne({referenceName: argv[1]}).exec();
+            const server : IServer =  await Server.findOne({id : msg.guild.id}).exec();
+
+            if(!character) {
+                msg.reply(`Character does not exist.`)
+                return;
+            }
+            
+            let characterMessage = new RichEmbed();
+            characterMessage.setTitle(`${character.name || "(No Name)"}`);
+            characterMessage.setAuthor(
+                `Character Sheet!`,
+                character.image ? character.image : Bot.user.avatarURL
+              );
+            characterMessage.addField('Name', character.name || "(No Name)", true);
+            if(character.image) {
+                characterMessage.setImage(character.image);
+            }
+            characterMessage.setDescription(`${character.description ? character.description : "(No Description)"}`)
+
+            msg.channel.send(characterMessage);
+            
+            if( await isAdmin(msg) || msg.author.id == character.ownerId) {
+                //Display hidden fields
+                return;
+            }
+
+
+        }
+        catch(err) {
+            CommandManager.printHelp(msg.channel,"Something went wrong!");
+            console.log(err)
+        }
+
+    }
 }

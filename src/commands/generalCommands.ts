@@ -28,7 +28,7 @@ export const Pong: ICommand = {
   description: "Plays ping with a pong",
   examples: [
     {
-      example: "!pong",
+      example: "",
       exampleDesc:
         "Will reply to your message with it's unrestricted interest in playing ping."
     }
@@ -96,7 +96,7 @@ export const Help: ICommand = {
     if (parseInt(argv[1])) {
       let pageIndex = parseInt(argv[1]);
       let commands: string[] = [];
-      let paginationNumb: number = 4;
+      let paginationNumb: number = 8;
       let pageBefore: boolean = false;
       let pageAfter: boolean = false;
       let HelpMessage = new RichEmbed();
@@ -109,11 +109,16 @@ export const Help: ICommand = {
       if(CommandManager.commandList[(pageIndex - 1) * paginationNumb]) {
         //Page exists    
         CommandManager.commandList.forEach((elem, i) => {
+
           if (i <= pageIndex - 1 * paginationNumb) {
             pageBefore = true;
           } 
-          else if (
-            i > (pageIndex - 1) * paginationNumb &&
+          else if ( i > pageIndex*paginationNumb) {
+            pageAfter = true;
+          }
+
+          if (
+            i >= (pageIndex - 1) * paginationNumb &&
             i <= pageIndex * paginationNumb
           ) {
             HelpMessage.addField(
@@ -122,11 +127,17 @@ export const Help: ICommand = {
               false
             );
             commands.push(elem.command);
-          } else if ( i > pageIndex*paginationNumb) {
-            pageAfter = true;
           }
+
         });
+        if(pageAfter) {
+          HelpMessage.setFooter(`Type '${discordBotConfig.customPrefix}help ${pageIndex+1}' to view next page.`)
+        }
+        else {
+          HelpMessage.setFooter(`This is the last page of commands.`);
+        }
         msg.reply(HelpMessage);
+
       }
       else {
         HelpMessage.setDescription("Invalid Page Number");
