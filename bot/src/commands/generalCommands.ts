@@ -1,13 +1,14 @@
 import { Message, RichEmbed } from "discord.js";
-import { ICommand, permissionLevel } from "./commandsTypings";
+import { CommandCategory, ICommand, permissionLevel } from "./commandsTypings";
 import { CommandManager } from "./commands";
 import { Bot } from "..";
 import { discordBotConfig } from "../util/enviromentalVariables";
 
 export const Ping: ICommand = {
-  permissionLevel: permissionLevel.user,
   command: "Ping",
   description: "Plays pong with a ping",
+  permissionLevel: permissionLevel.user,
+  commandCategory: CommandCategory.generalCommands,
   examples: [
     {
       example: "!ping",
@@ -23,9 +24,10 @@ export const Ping: ICommand = {
 
 //Pong Command for Sero
 export const Pong: ICommand = {
-  permissionLevel: permissionLevel.user,
   command: "Pong",
   description: "Plays ping with a pong",
+  permissionLevel: permissionLevel.user,
+  commandCategory: CommandCategory.generalCommands,
   examples: [
     {
       example: "",
@@ -42,6 +44,8 @@ export const Pong: ICommand = {
 export const Clear: ICommand = {
   command: "Clear",
   description: "Clears the current chat of up to 100 messages.",
+  permissionLevel: permissionLevel.admin,
+  commandCategory: CommandCategory.generalCommands,
   syntax: [{ syntaxName: "Number of Messages", optional: false }],
   examples: [
     {
@@ -49,7 +53,6 @@ export const Clear: ICommand = {
       exampleDesc: "Removes the last 15 messages in the current chat"
     }
   ],
-  permissionLevel: permissionLevel.admin,
   async action(argv: string[], user: string, msg: Message) {
     //Wow something cool happens here!
     if (parseInt(argv[1])) {
@@ -73,6 +76,8 @@ export const Clear: ICommand = {
 export const Help: ICommand = {
   command: "Help",
   description: "Displays all commands or gives help on a specific command.",
+  permissionLevel: permissionLevel.user,
+  commandCategory: CommandCategory.generalCommands,
   syntax: [
     { syntaxName: "PageNumber", optional: true },
     { syntaxName: "Command", optional: true }
@@ -91,7 +96,6 @@ export const Help: ICommand = {
       exampleDesc: "Displays information regarding the clear command."
     }
   ],
-  permissionLevel: permissionLevel.user,
   async action(argv: string[], user: string, msg: Message) {
     if (parseInt(argv[1])) {
       let pageIndex = parseInt(argv[1]);

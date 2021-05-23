@@ -1,7 +1,16 @@
 import { Message, TextChannel, DMChannel, GroupDMChannel, User  } from 'discord.js';
 
+export enum CommandCategory {
+  adminCharacterCommands,
+  adminGeneralCommands,
+  characterCommands,
+  debugCommands,
+  generalCommands
+}
+
 export interface ICommand {
   command : string; //Command's name(what you put in after prefix)
+  commandCategory: CommandCategory;
   description?: string; //Description
   syntax?: {syntaxName : string, optional: boolean}[]; //Syntax, each index contains syntax for that position of the command's arguements
   examples?: {exampleDesc : string, example: string}[];

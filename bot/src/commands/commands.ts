@@ -17,10 +17,11 @@ import {
 } from "discord.js";
 import { discordBotConfig } from "../util/enviromentalVariables";
 import { Bot } from '../index'
-import { InitServer } from "./debugCommands";
+import { CopyServer, InitServer } from "./debugCommands";
 import { SetNotificationsChannel } from "./adminCommands";
 import { CharacterSetField, CreateCharacter, GetCharacter, ListCharacters, RemoveCharacter } from "./characterCommands";
 import { CreateDefaultCharacterField, ListDefaultCharacterFields, RemoveDefaultCharacterField } from "./adminCharacterCommands";
+
 export let CommandManager: ICommandManager = {
   prefix: discordBotConfig.customPrefix,
   commandList: [
@@ -42,8 +43,10 @@ export let CommandManager: ICommandManager = {
     RemoveCharacter, 
     ListCharacters, 
     CharacterSetField, 
-    GetCharacter
+    GetCharacter,
+    CopyServer
   ],
+
   printHelp: (
     channel: TextChannel | DMChannel | GroupDMChannel,
     title: string,
@@ -59,6 +62,8 @@ export let CommandManager: ICommandManager = {
     HelpMessage.setColor(0xff0000);
     channel.send(HelpMessage);
   },
+
+
   permError: (
     channel: TextChannel | DMChannel | GroupDMChannel,
     target: User
@@ -72,6 +77,8 @@ export let CommandManager: ICommandManager = {
     HelpMessage.setColor(0xff0000);
     channel.send(target, HelpMessage);
   },
+
+
   printCommandHelpPage: (
     channel: TextChannel | DMChannel | GroupDMChannel,
     targetCommand: string
@@ -79,25 +86,31 @@ export let CommandManager: ICommandManager = {
     for (let i = 0; i < CommandManager.commandList.length; i++) {
       let pickedCmd: ICommand = CommandManager.commandList[i];
       if (pickedCmd.command.toLowerCase() == targetCommand.toLowerCase()) {
+        
         let HelpMessage = new RichEmbed();
         HelpMessage.setAuthor(
           `${Bot.user.username} is giving assistance!`,
           Bot.user.avatarURL
         );
+
         HelpMessage.setTitle(
           `Information Reguarding **${
             CommandManager.prefix
           }${pickedCmd.command.toLowerCase()}**.`
         );
+
         HelpMessage.setColor(discordBotConfig.color);
+
         HelpMessage.addField(`| Permission Required |`,
           pickedCmd.permissionLevel == 0 ? "User" : "Admin",
           false
         );
+
         HelpMessage.addField(`\u200B| Description |`,
           pickedCmd.description,
           false
         );
+
         let syntaxInput: string = `${
           CommandManager.prefix
         }${pickedCmd.command.toLowerCase()} `;
@@ -111,6 +124,7 @@ export let CommandManager: ICommandManager = {
             }
           });
         }
+
         HelpMessage.addField(`\u200B| Syntax |`, syntaxInput, true);
         if (pickedCmd.examples) {
           let exampleText = ``

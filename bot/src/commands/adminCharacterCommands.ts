@@ -1,4 +1,4 @@
-import { ICommand, permissionLevel } from "./commandsTypings";
+import { CommandCategory, ICommand, permissionLevel } from "./commandsTypings";
 import { CommandManager } from "./commands";
 import { discordBotConfig } from "../util/enviromentalVariables";
 import { Message, RichEmbed } from "discord.js";
@@ -9,9 +9,10 @@ import { isAdmin } from "../resources/isAdmin";
 import { defaultOrderPriority } from "../models/CharacterField";
 
 export const ListDefaultCharacterFields: ICommand = {
-    permissionLevel: permissionLevel.admin,
     command: "ListDefaultCharacterFields",
     description: "Lists Default Character Fields.",
+    permissionLevel: permissionLevel.admin,
+    commandCategory: CommandCategory.adminCharacterCommands,
     examples:[
         {
             example: "",
@@ -41,9 +42,10 @@ export const ListDefaultCharacterFields: ICommand = {
 }
 
 export const RemoveDefaultCharacterField: ICommand = {
-    permissionLevel: permissionLevel.admin,
     command: "RemoveDefaultCharacterField",
     description: "Removes a Default Character Field.",
+    permissionLevel: permissionLevel.admin,
+    commandCategory: CommandCategory.adminCharacterCommands,
     examples:[
         {
             example: "Height",
@@ -95,9 +97,10 @@ export const RemoveDefaultCharacterField: ICommand = {
 
 
 export const CreateDefaultCharacterField: ICommand = {
-    permissionLevel: permissionLevel.admin,
     command: "CreateDefaultCharacterField",
     description: "Adds a Default Character Field.",
+    permissionLevel: permissionLevel.admin,
+    commandCategory: CommandCategory.adminCharacterCommands,
     examples:[
         {
             example: "Height true false",
@@ -164,12 +167,14 @@ export const CreateDefaultCharacterField: ICommand = {
             }
 
             //adding field
+            /*
             server.defaultFields.push({
                 title: argv[1],
                 public: argv[2] == 'true' ? true : false,
                 numeric: argv[3] == 'true' ? true : false,
                 orderPriority: argv[4] == argv[4] ? Number(argv[4]) : defaultOrderPriority
             })
+            */
 
             server.save();
             AddFieldMessage.setAuthor(

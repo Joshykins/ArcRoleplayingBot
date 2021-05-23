@@ -1,13 +1,14 @@
 import {  Message, TextChannel } from "discord.js";
-import { ICommand, permissionLevel } from "./commandsTypings";
+import { CommandCategory, ICommand, permissionLevel } from "./commandsTypings";
 import { CommandManager } from "./commands";
 import { discordBotConfig } from "../util/enviromentalVariables";
 import { IServer, Server } from "../models/Server";
 
 export const SetNotificationsChannel: ICommand = {
-  permissionLevel: permissionLevel.admin,
   command: "notifychannel",
   description: "Gets or Sets the notification channel that will be used for all bot notifcations.",
+  permissionLevel: permissionLevel.admin,
+  commandCategory: CommandCategory.adminGeneralCommands,
   examples: [
     {
       example: "notifychannel #notifications-channel",

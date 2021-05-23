@@ -1,4 +1,4 @@
-import { ICommand, permissionLevel } from "./commandsTypings";
+import { CommandCategory, ICommand, permissionLevel } from "./commandsTypings";
 import { CommandManager } from "./commands";
 import { discordBotConfig } from "../util/enviromentalVariables";
 import { Message, RichEmbed } from "discord.js";
@@ -8,9 +8,10 @@ import { IServer, Server } from "../models/Server";
 import { isAdmin } from "../resources/isAdmin";
 
 export const CreateCharacter: ICommand = {
-    permissionLevel: permissionLevel.user,
     command: "CreateCharacter",
     description: "Creates a new character with the specified reference id.",
+    permissionLevel: permissionLevel.user,
+    commandCategory: CommandCategory.characterCommands,
     examples:[
         {
             example: "CreateCharacter bobross",
@@ -67,9 +68,10 @@ export const CreateCharacter: ICommand = {
 
 
 export const RemoveCharacter: ICommand = {
-    permissionLevel: permissionLevel.user,
     command: "RemoveCharacter",
     description: "Remove a character with the specified reference id.",
+    permissionLevel: permissionLevel.user,
+    commandCategory: CommandCategory.characterCommands,
     examples:[
         {
             example: "RemoveCharacter bobross",
@@ -117,9 +119,10 @@ export const RemoveCharacter: ICommand = {
 
 
 export const ListCharacters: ICommand = {
-    permissionLevel: permissionLevel.user,
     command: "ListCharacters",
     description: "List all characters with their name and identifier.",
+    permissionLevel: permissionLevel.user,
+    commandCategory: CommandCategory.characterCommands,
     examples:[
         {
             example: "ListCharacters",
@@ -158,32 +161,33 @@ export const ListCharacters: ICommand = {
 
 
 export const CharacterSetField: ICommand = {
-    permissionLevel: permissionLevel.user,
     command: "SetCharacterField",
     description: "Sets a field of the character.",
+    permissionLevel: permissionLevel.user,
+    commandCategory: CommandCategory.characterCommands,
     examples:[
         {
-            example: "setcharacterfield {identifier} name Basil V. Sterling",
+            example: "{identifier} name Basil V. Sterling",
             exampleDesc: "Sets a characters name."
         },
         {
-            example: "setcharacterfield {identifier} outwardage 20s",
+            example: "{identifier} outwardage 20s",
             exampleDesc: "Sets a character's outward age."
         },
         {
-            example: "setcharacterfield {identifier} origin Kaziria",
+            example: "{identifier} origin Kaziria",
             exampleDesc: "Sets a character's origin."
         },
         {
-            example: "setcharacterfield {identifier} race Elf",
+            example: "{identifier} race Elf",
             exampleDesc: "Sets a character's race."
         },
         {
-            example: "setcharacterfield {identifier} sex Female",
+            example: "{identifier} sex Female",
             exampleDesc: "Sets a character's sex."
         },
         {
-            example: "setcharacterfield {identifier} height 6'6\"",
+            example: "{identifier} height 6'6\"",
             exampleDesc: "Sets a character's height."
         },
         {
@@ -191,11 +195,11 @@ export const CharacterSetField: ICommand = {
             exampleDesc: "Sets a character's beautifulness."
         },
         {
-            example: "setcharacterfield {identifier} description A lushus elven queen.",
+            example: "{identifier} description A lushus elven queen.",
             exampleDesc: "Sets a character's description."
         },
         {
-            example: "setcharacterfield {identifier} image media.discordapp.net/attachments/688652229669945354/732683076190208010/brocktherock.png",
+            example: "{identifier} image media.discordapp.net/attachments/688652229669945354/732683076190208010/brocktherock.png",
             exampleDesc: "Sets a character's image."
         }
         
@@ -281,9 +285,10 @@ export const CharacterSetField: ICommand = {
 
 
 export const GetCharacter: ICommand = {
-    permissionLevel: permissionLevel.user,
     command: "GetCharacter",
     description: "Gets a character with the specified reference id.",
+    permissionLevel: permissionLevel.user,
+    commandCategory: CommandCategory.characterCommands,
     examples:[
         {
             example: "bobross",
