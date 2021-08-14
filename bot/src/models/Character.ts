@@ -1,38 +1,22 @@
-import { model, Schema, Model, Document } from 'mongoose';
+import { Collection, Db, MongoClient, ObjectId } from 'mongodb';
 import { CharacterField } from './CharacterField';
+import { mongoClient } from './connectionSetup';
 
-
-//TODO: ADD BEAUTIFULNESS TO DEFAULT DYNAMICALLY(NOT STATIC) FIELD FOR TEST FIELD
-
-export interface ICharacter extends Document {
-    name: string,
-    description: string,
-    image: string,
+export interface Character {
+    _id?: ObjectId;
+    name: string;
+    description: string;
+    image: string;
     
-    //
-    additionalFields: CharacterField[]
+    additionalFields: CharacterField[];
     
-
     //Additional Fields from Creation Process
-    referenceName: string,
-    ownerId: string,
-    serverId: string,
-    currency: number
+    referenceName: string;
+    ownerId: string;
+    serverId: string;
 }
 
-const CharacterSchema: Schema = new Schema({
-    name: {type: String, required: false},
-    description: {type: String, required: false},
-    image: {type: String, required: false},
-    //Additional Fields
-    additionalFields: {type: Array, required: false},
 
-    //Application-Required Fields
-    referenceName: {type: String, required: true},
-    ownerId: {type: String, required: true},
-    serverId: {type: String, required: true},
-    currency: {type: Number, required: false, default: 0}
-})
-
-
-export const Character: Model<ICharacter> = model('Characters', CharacterSchema);
+export const Characters = async() : Promise<Collection<Character>> => {
+    return mongoClient.db().collection<Character>("Characters");
+}

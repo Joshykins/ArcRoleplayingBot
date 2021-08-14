@@ -50,7 +50,7 @@ export const SetNotificationsChannel: ICommand = {
         else {
             if(server.notificationsChannel) {
                 selectedChannel = msg.guild.channels.get(server.notificationsChannel) as TextChannel;
-                msg.reply(`#${selectedChannel} Is the current notification channel`)
+                CommandManager.printReply(msg,`#${selectedChannel} Is the current notification channel`)
             }      
             else {
                 CommandManager.printHelp(msg.channel, "No Channel Selected");

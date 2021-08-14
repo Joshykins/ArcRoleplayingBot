@@ -27,13 +27,13 @@ export const CreateCharacter: ICommand = {
     async action(argv: string[], user: string, msg: Message) {
         //Check if chara exists
         if(!argv[1]) {
-            msg.reply("Provide an identifier.");
+            CommandManager.printReply(msg,"Provide an identifier.");
             return;
         }
 
         //Make sure there isn't more than one identifier
         if(argv[2]) {
-            msg.reply("Identifiers can not contain spaces.");
+            CommandManager.printReply(msg,"Identifiers can not contain spaces.");
             return;
         }
 
@@ -42,7 +42,7 @@ export const CreateCharacter: ICommand = {
             const foundChara = await Character.findOne({referenceName: argv[1]}).exec();
 
             if(foundChara) {
-                msg.reply(`Character with the identifier '${argv[1]}' exists already. Use a different one.`)
+                CommandManager.printReply(msg,`Character with the identifier '${argv[1]}' exists already. Use a different one.`)
                 return;
             }
             
@@ -55,7 +55,7 @@ export const CreateCharacter: ICommand = {
 
             character.save();
 
-            msg.reply("Character created successfully!");
+            CommandManager.printReply(msg,"Character created successfully!");
         }
         catch(err) {
             CommandManager.printHelp(msg.channel,"Something went wrong!");
@@ -87,7 +87,7 @@ export const RemoveCharacter: ICommand = {
     async action(argv: string[], user: string, msg: Message) {
         //Check if chara exists
         if(!argv[1]) {
-            msg.reply("Provide an identifier.");
+            CommandManager.printReply(msg,"Provide an identifier.");
             return;
         }
         try {
@@ -95,17 +95,17 @@ export const RemoveCharacter: ICommand = {
             const server : IServer =  await Server.findOne({id : msg.guild.id}).exec();
 
             if(!foundChara) {
-                msg.reply(`Character does not exist.`)
+                CommandManager.printReply(msg,`Character does not exist.`)
                 return;
             }
             
             if( await isAdmin(msg) || msg.author.id == foundChara.ownerId) {
                 foundChara.remove();
-                msg.reply("Character removed successfully!");
+                CommandManager.printReply(msg,"Character removed successfully!");
                 return;
             }
             else {
-                msg.reply("You do not have permission to remove this character.");
+                CommandManager.printReply(msg,"You do not have permission to remove this character.");
             }
 
         }
@@ -224,13 +224,13 @@ export const CharacterSetField: ICommand = {
 
             //Checks if identifier exists
             if(!argv[1]) {
-                msg.reply("Provide a character identifier.")
+                CommandManager.printReply(msg,"Provide a character identifier.")
             }
 
             //Gets characters(Errors if does not exist)
             let character = await Character.findOne({referenceName: argv[1]});
             if(!character) {
-                msg.reply("Invalid character");
+                CommandManager.printReply(msg,"Invalid character");
                 return;
             }
             
@@ -248,7 +248,7 @@ export const CharacterSetField: ICommand = {
             //Check permissions
 
             if( !(await isAdmin(msg) || msg.author.id == character.ownerId) ) {
-                msg.reply("Character is not yours! You can't edit it!");
+                CommandManager.printReply(msg,"Character is not yours! You can't edit it!");
                 return;
             }
 
@@ -256,19 +256,19 @@ export const CharacterSetField: ICommand = {
             switch (field) {
                 case "name":
                     character.update({name: remainderString}).exec();
-                    msg.reply("Character Updated!");
+                    CommandManager.printReply(msg,"Character Updated!");
                     break;
                 case "description":
                     character.update({description: remainderString}).exec();
-                    msg.reply("Character Updated!");
+                    CommandManager.printReply(msg,"Character Updated!");
                     break;
                 case "image":
                     character.update({image: remainderString}).exec();
-                    msg.reply("Character Updated!");
+                    CommandManager.printReply(msg,"Character Updated!");
                     break;
 
                 default:
-                    msg.reply("Field not found.")
+                    CommandManager.printReply(msg,"Field not found.")
                     break;
             }
             
@@ -304,7 +304,7 @@ export const GetCharacter: ICommand = {
     async action(argv: string[], user: string, msg: Message) {
         //Check if chara exists
         if(!argv[1]) {
-            msg.reply("Provide an identifier.");
+            CommandManager.printReply(msg,"Provide an identifier.");
             return;
         }
 
@@ -313,7 +313,7 @@ export const GetCharacter: ICommand = {
             const server : IServer =  await Server.findOne({id : msg.guild.id}).exec();
 
             if(!character) {
-                msg.reply(`Character does not exist.`)
+                CommandManager.printReply(msg,`Character does not exist.`)
                 return;
             }
             

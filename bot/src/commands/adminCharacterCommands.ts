@@ -60,7 +60,7 @@ export const RemoveDefaultCharacterField: ICommand = {
     ],
     async action(argv: string[], user: string, msg: Message) {
         if(!argv[1]) {
-            msg.reply("Provide a field to be deleted.");
+            CommandManager.printReply(msg, "Provide a field to be deleted.");
             return;
         }
         try {        
@@ -73,7 +73,7 @@ export const RemoveDefaultCharacterField: ICommand = {
             });
 
             if(!fieldFound) {
-                msg.reply(`Field '${argv[1]}' not found.`);
+                CommandManager.printReply(msg,`Field '${argv[1]}' not found.`);
                 return;
             }
 
@@ -131,22 +131,22 @@ export const CreateDefaultCharacterField: ICommand = {
     ],
     async action(argv: string[], user: string, msg: Message) {
         if(!argv[1]) {
-            msg.reply("Provide a field to be added.");
+            CommandManager.printReply(msg,"Provide a field to be added.");
             return;
         }
         
         if(!argv[2] || !(argv[2] == 'true' || argv[2] == 'false')) {
-            msg.reply("Provide specify if the field is public or not.(true or false)");
+            CommandManager.printReply(msg,"Provide specify if the field is public or not.(true or false)");
             return;
         }
         
         if(!argv[3] || !(argv[3] == 'true' || argv[3] == 'false')) {
-            msg.reply("Provide specify if the field is numeric or not.(true or false)");
+            CommandManager.printReply(msg,"Provide specify if the field is numeric or not.(true or false)");
             return;
         }
 
         if(argv[4] && !Number(argv[4])) {   
-            msg.reply("Enter a valid number for the order priority.");
+            CommandManager.printReply(msg,"Enter a valid number for the order priority.");
             return;
         }
 
@@ -162,7 +162,7 @@ export const CreateDefaultCharacterField: ICommand = {
 
             if(fieldFound) {
                 //Overwrite?
-                msg.reply(`Field '${argv[1]}' already exists.`);
+                CommandManager.printReply(msg,`Field '${argv[1]}' already exists.`);
                 return;
             }
 

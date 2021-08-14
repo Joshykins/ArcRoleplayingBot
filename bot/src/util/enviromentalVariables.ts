@@ -1,3 +1,8 @@
+//Enviromental Variables
+import * as dotenv from "dotenv";
+import { LogLevels } from "./logger";
+
+
 interface DiscordBotConfig {
     token: string,
     color: number,
@@ -5,13 +10,28 @@ interface DiscordBotConfig {
     notificationsChannel: string,
     adminRole: string,
     customPrefix: string, 
-    dbConnectionString: string
+    dbConnectionString: string,
+    debugMode: boolean,
+    logLevel: LogLevels
 }
 
-//Enviromental Variables
-import * as dotenv from "dotenv";
-
 dotenv.config();
+
+let logLevelEnv : string = process.env.LOG_LEVEL || "DEBUG" 
+let logLevel : LogLevels;
+
+if(logLevelEnv == "ERROR") {
+    logLevel = LogLevels.ERROR;
+}
+else if(logLevelEnv == "DEBUG") {
+    //always log all
+    logLevel = LogLevels.DEBUG;
+}
+else {
+    //always log all
+    logLevel = LogLevels.INFO;
+}
+
 
 
 
@@ -28,5 +48,8 @@ export const discordBotConfig : DiscordBotConfig = {
     notificationsChannel: "607132389243748382",
     adminRole: "607162419147702283",
     customPrefix: process.env.CUSTOM_PREFIX || "!",
-    dbConnectionString: process.env.DB_STRING
+    dbConnectionString: process.env.DB_STRING,
+    debugMode: process.env.DEBUG == "true",
+    logLevel: logLevel
+
 } 

@@ -1,17 +1,32 @@
-import {Client, Message, TextChannel, RichEmbed, MessageReaction, User} from 'discord.js';
+import {Client, Message, TextChannel,  MessageReaction, User} from 'discord.js';
 import { setupCommandEvents } from './commands/commandEvents';
-import { CommandParser} from "./commands/commands";
-import { botDB } from './models/connectionSetup';
+import {  ValidateDatabaseConnection } from './models/connectionSetup';
+import { SetupStatusInterval } from './resources/updateStatusInterval';
 import { discordBotConfig }from "./util/enviromentalVariables";
-export const Bot = new Client;
+import { Log, LogLevels } from './util/logger';
+export const Bot = new Client({intents: 123});
 
 
 setupCommandEvents();
 
-//connect to DB then login
-botDB().then(async res => {
-  if(res) {
-    await Bot.login(discordBotConfig.token);
+const InitBot = async () => {
+  let dbSucceeded = true;
+  try {
+      dbSucceeded = await ValidateDatabaseConnection();
+  }
+  catch(err) {
+      dbSucceeded = false;
+      Log(err, LogLevels.ERROR);
+  }
+
+  
+  if(!dbSucceeded) {
+    Log("Stopping due to database connection issue", LogLevels.ERROR);
+    return;
+  }
+
+  await Bot.login(discordBotConfig.token);
+    SetupStatusInterval();
     console.log("\x1b[0m",`
      _    ___   ___     ___  ___  
     /_\\  | _ \\ / __|   | _ \\| _ \\ 
@@ -29,8 +44,6 @@ botDB().then(async res => {
 
     `)
     console.log("\x1b[34m","[ Application started Successfully ] \n ","\x1b[0m");
-  }
-  else {
-    console.error("\x1b[31m","[ Application Failed to connect to Mongo] \n ","\x1b[0m");
-  }
-})
+}
+
+InitBot();

@@ -1,4 +1,4 @@
-import { Ping, Clear, Help, Pong } from "./generalCommands";
+
 import "reflect-metadata";
 
 import {
@@ -7,26 +7,31 @@ import {
   ICommand,
   permissionLevel
 } from "./commandsTypings";
+
 import {
   Message,
-  RichEmbed,
+  MessageEmbed,
   TextChannel,
   User,
-  DMChannel,
-  GroupDMChannel
+  DMChannel
 } from "discord.js";
 import { discordBotConfig } from "../util/enviromentalVariables";
 import { Bot } from '../index'
-import { CopyServer, InitServer } from "./debugCommands";
+
+//General
+import { Ping, Clear, Help, Pong, Roll } from "./generalCommands";
+//Debug
+import { InitServer } from "./debugCommands";
+//Admin
 import { SetNotificationsChannel } from "./adminCommands";
+//Character
 import { CharacterSetField, CreateCharacter, GetCharacter, ListCharacters, RemoveCharacter } from "./characterCommands";
+//Admin Character
 import { CreateDefaultCharacterField, ListDefaultCharacterFields, RemoveDefaultCharacterField } from "./adminCharacterCommands";
 
-export let CommandManager: ICommandManager = {
+let CommandManager: ICommandManager = {
   prefix: discordBotConfig.customPrefix,
   commandList: [
-    //Debug
-    InitServer,
     //Admin
     SetNotificationsChannel,
     //General
@@ -34,6 +39,7 @@ export let CommandManager: ICommandManager = {
     Pong, 
     Clear, 
     Help,  
+    Roll,
     //Admin Character
     ListDefaultCharacterFields,
     RemoveDefaultCharacterField,
@@ -43,9 +49,21 @@ export let CommandManager: ICommandManager = {
     RemoveCharacter, 
     ListCharacters, 
     CharacterSetField, 
-    GetCharacter,
-    CopyServer
+    GetCharacter
   ],
+
+  printReply: async ( 
+    msg: Message,
+    text: any
+  ) => {
+    if (typeof(text) == "string") {
+      msg.channel.send(`✣ | ${msg.author} | ✣ \n  ${ text} \n`);
+    }
+    else {
+      msg.reply(text);
+    }
+    
+  },
 
   printHelp: (
     channel: TextChannel | DMChannel | GroupDMChannel,
@@ -141,6 +159,14 @@ export let CommandManager: ICommandManager = {
   }
 };
 
+//Add debug commands, if debug mode.
+if(discordBotConfig.debugMode) {
+  CommandManager.commandList.unshift(    
+    InitServer
+    );
+}
+export { CommandManager };
+
 export let CommandParser = (msg: Message) => {
   let status: parseStatus;
   if (
@@ -153,8 +179,8 @@ export let CommandParser = (msg: Message) => {
     let commandFound: boolean = false;
 
     //Find if admin
-    let isAdmin: boolean = msg.author.id == msg.guild.ownerID || 
-    msg.member.roles.find(role => role.hasPermission('ADMINISTRATOR')) ? true : false;
+    let isAdmin: boolean = msg.author.id == msg.guild.ownerId || 
+    msg.member.roles.cache.some(role => role.permissions.has("ADMINISTRATOR") ? true : false);
 
 
     for (let i = 0; i < CommandManager.commandList.length; i++) {

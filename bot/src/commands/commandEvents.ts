@@ -1,6 +1,6 @@
-import { Message, MessageReaction, RichEmbed, TextChannel, User } from "discord.js";
+import { Message, MessageEmbed, MessageReaction, TextChannel, User } from "discord.js";
 import { Bot } from "..";
-import { IServer, Server } from "../models/Server";
+import { Servers } from "../models/Server";
 import { discordBotConfig } from "../util/enviromentalVariables";
 import { CommandManager, CommandParser } from "./commands";
 
@@ -16,36 +16,37 @@ export const setupCommandEvents = () => {
         CommandParser(msg);
     });
     
-    Bot.on('guildMemberAdd', (member ) => {
-        let welcomeMessage = new RichEmbed();
-        welcomeMessage.setAuthor(`Hello, ${member.user.username}!`, member.user.avatarURL);
+    Bot.on('guildMemberAdd', async (member) => {
+        let welcomeMessage = new MessageEmbed();
+        welcomeMessage.setAuthor(`Hello, ${member.user.username}!`, member.user.avatarURL.toString());
         welcomeMessage.setTitle(`Welcome to **${member.guild.name}**, Live long and prosper!`);
         welcomeMessage.setDescription(`This server uses the Arc Roleplaying Enviroment by Sero Enterprises#0001, if you are new to using Arc Roleplaying get started by typing !info.`);
-        welcomeMessage.setColor(discordBotConfig.color);
-        welcomeMessage.timestamp = new Date();     
+        welcomeMessage.setColor(discordBotConfig.color);  
+        const ServersCollection = await Servers();
+
         //Retrieve server 
         try {
-            Server.findOne({id : member.guild.id}).exec().then(server => {
-                let targetChannel = member.guild.channels.get(server.notificationsChannel) as TextChannel;
-                targetChannel.send(member, welcomeMessage);
-            });
+            const server = await ServersCollection.findOne({id : member.guild.id})
+            let targetChannel = await member.guild.channels.fetch(server.notificationsChannel) as TextChannel;
+            targetChannel.send({embeds: [welcomeMessage]});
+            
         }
         catch(err) {
             console.log(err);
         }
     });
         
-    Bot.on('guildMemberRemove', member => {
-        let leaveMessage = new RichEmbed();
-        leaveMessage.setAuthor(`Bye, ${member.user.username}!`, member.user.avatarURL);
+    Bot.on('guildMemberRemove', async member => {
+        let leaveMessage = new MessageEmbed();
+        leaveMessage.setAuthor(`Bye, ${member.user.username}!`);
         leaveMessage.setTitle(`**${member.guild.name}** and I will miss you dearly!`);
         leaveMessage.setColor(discordBotConfig.color);
-        leaveMessage.timestamp = new Date();
+        const ServersCollection = await Servers();
+
         try {
-            Server.findOne({id : member.guild.id}).exec().then(server => {
-                let targetChannel = member.guild.channels.get(server.notificationsChannel) as TextChannel;
-                targetChannel.send(member, leaveMessage);
-            });
+            const server = await ServersCollection.findOne({id : member.guild.id})
+            let targetChannel = await member.guild.channels.fetch(server.notificationsChannel) as TextChannel;
+            targetChannel.send({embeds: [leaveMessage]});
         }
         catch(err) {
             console.log(err);

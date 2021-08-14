@@ -3,6 +3,7 @@ import { CommandCategory, ICommand, permissionLevel } from "./commandsTypings";
 import { CommandManager } from "./commands";
 import { Bot } from "..";
 import { discordBotConfig } from "../util/enviromentalVariables";
+import { FormatNumberWithCommas, FormatWithOrdinalSuffix } from "../resources/stringUtils";
 
 export const Ping: ICommand = {
   command: "Ping",
@@ -18,7 +19,7 @@ export const Ping: ICommand = {
   ],
   async action(argv: string[], user: string, msg: Message) {
     //Wow something cool happens here!
-    msg.reply("Lets play pong!");
+    CommandManager.printReply(msg,"Lets play pong!");
   }
 };
 
@@ -37,7 +38,71 @@ export const Pong: ICommand = {
   ],
   async action(argv: string[], user: string, msg: Message) {
     //Wow something cool happens here!
-    msg.reply("Lets play ping, big boy!");
+    CommandManager.printReply(msg,"Lets play ping, big boy!");
+  }
+};
+
+//Pong Command for Sero
+export const Roll: ICommand = {
+  command: "Roll",
+  description: "Rolls dice.",
+  permissionLevel: permissionLevel.user,
+  commandCategory: CommandCategory.generalCommands,
+  examples: [
+    {
+      example: "",
+      exampleDesc:
+        "Will give a number between 1 and 20. Same as 1d20 (including 1 and 100)"
+    },
+    {
+      example: " 2d16",
+      exampleDesc:
+        "Will roll a 2d16. (min 2, max 32)"
+    }
+  ],
+  async action(argv: string[], user: string, msg: Message) {
+    //Wow something cool happens here!
+    if(argv[1] && argv[1].indexOf("d") != -1) {
+      const diceCount = parseInt(argv[1].substr(0, argv[1].indexOf("d")));
+      const sides = parseInt(argv[1].substr(argv[1].indexOf("d")+1, argv[1].length));
+
+      if(diceCount > 10) {
+        const min = diceCount;
+        const max = diceCount*sides;
+        const difference = Math.abs(max-min)+1;
+        const decision = Math.floor(Math.random()*difference) + min;
+
+
+        CommandManager.printReply(msg, `Rolled a ${argv[1]} and got ${FormatNumberWithCommas(decision)} \n (Too many die! Not listing individual rolls.)`);
+      }
+      else {
+        let sum : number = 0;
+        let throws : number[] = [];
+        let throwMessages = ""
+        for (let i = 0; i < diceCount; i++) {
+          const result = Math.floor(Math.random()*sides)+1;
+          throws.push(result);
+          sum += result;
+          throwMessages += `\n ${FormatWithOrdinalSuffix(i+1)} roll was ${FormatNumberWithCommas(result)}`
+        }
+        CommandManager.printReply(msg, `Rolled a ${argv[1]} and got ${FormatNumberWithCommas(sum)}.\n ${throwMessages}`);
+      }
+
+    }
+    else {
+        let diceCount = 1;
+        let sides = 20;
+        let sum : number = 0;
+        let throws : number[] = [];
+        let throwMessages = ""
+        for (let i = 0; i < diceCount; i++) {
+          const result = Math.floor(Math.random()*sides)+1;
+          throws.push(result);
+          sum += result;
+          throwMessages += `\n ${FormatWithOrdinalSuffix(i+1)} roll was ${FormatNumberWithCommas(result)}`
+        }
+        CommandManager.printReply(msg, `Rolled a 1d20 and got ${FormatNumberWithCommas(sum)}.\n ${throwMessages}`);
+    }
   }
 };
 
@@ -103,6 +168,7 @@ export const Help: ICommand = {
       let paginationNumb: number = 8;
       let pageBefore: boolean = false;
       let pageAfter: boolean = false;
+      let commandCategory: CommandCategory = undefined; 
       let HelpMessage = new RichEmbed();
       HelpMessage.setAuthor(
         `${Bot.user.username} is giving assistance!`,
@@ -125,6 +191,40 @@ export const Help: ICommand = {
             i >= (pageIndex - 1) * paginationNumb &&
             i <= pageIndex * paginationNumb
           ) {
+            if(commandCategory != elem.commandCategory) {
+              commandCategory = elem.commandCategory; 
+              let categoryTitle = "";
+              let categoryDesc = "";
+              
+              if(commandCategory == CommandCategory.adminCharacterCommands) {
+                categoryTitle = "Admin Character Commands";
+                categoryDesc = "Administrative character commands, adding, remove, editing character fields."
+              }
+              else if ( commandCategory == CommandCategory.adminGeneralCommands ) {
+                categoryTitle = "Admin Commands";
+                categoryDesc = "General administrative commands."
+              }
+              else if ( commandCategory == CommandCategory.characterCommands ) {
+                categoryTitle = "Character Commands";
+                categoryDesc = "Creating, updating, and deleting characters."
+              }
+              else if ( commandCategory == CommandCategory.debugCommands ) {
+                categoryTitle = "Debug Commands";
+                categoryDesc = "You saw nothing."
+              }
+              else if ( commandCategory == CommandCategory.generalCommands ) {
+                categoryTitle = "General Commands";
+                categoryDesc = "Commands with a miscellaneous purpose."
+              }
+
+              categoryTitle = "\n✣ | " + categoryTitle + " | ✣"
+              categoryDesc = "​"
+              HelpMessage.addBlankField();
+              HelpMessage.addField (
+                categoryTitle,
+                categoryDesc
+              );
+            }
             HelpMessage.addField(
               elem.command,
               elem.description ? elem.description : "No Description",
@@ -140,13 +240,13 @@ export const Help: ICommand = {
         else {
           HelpMessage.setFooter(`This is the last page of commands.`);
         }
-        msg.reply(HelpMessage);
+        CommandManager.printReply(msg,HelpMessage);
 
       }
       else {
         HelpMessage.setDescription("Invalid Page Number");
           
-        msg.reply(HelpMessage);
+        CommandManager.printReply(msg,HelpMessage);
       }
     } else {
       let commandName:string;
@@ -154,7 +254,6 @@ export const Help: ICommand = {
       CommandManager.commandList.forEach(command => {
         if(argv[1] && argv[1].toLowerCase() == command.command.toLowerCase()) {
           commandName = command.command;
-          
         }
       })
       if(commandName) {
@@ -163,8 +262,6 @@ export const Help: ICommand = {
       else {
         CommandManager.printCommandHelpPage(msg.channel, "help");
       }
-      
-
     }
   }
 };
