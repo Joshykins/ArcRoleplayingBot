@@ -217,10 +217,6 @@ export let CommandParser = (msg: Message) => {
       
       let helpMessage = new RichEmbed();
 
-
-
-
-
       helpMessage.setAuthor(
         `Hello, ${msg.author.username}`,
         msg.author.avatarURL
