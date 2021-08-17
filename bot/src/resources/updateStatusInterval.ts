@@ -1,5 +1,5 @@
 import { Bot } from "..";
-import { Character } from "../models/Character";
+import { Character, Characters } from "../models/Character";
 import { discordBotConfig } from "../util/enviromentalVariables";
 import { FormatNumberWithCommas } from "./stringUtils";
 
@@ -12,8 +12,9 @@ const StatusInterval = async () => {
     const totalStatuses = 3;
     const chosenStatus = Math.floor(Math.random()*totalStatuses+1);
     if(chosenStatus == 1) {
-        
-        const count : number = await Character.countDocuments();
+        const CharactersCollection = await Characters();
+
+        const count : number = await CharactersCollection.countDocuments();
         Bot.user.setActivity(
             `${FormatNumberWithCommas(count)} characters.`,
             { type: "WATCHING" }

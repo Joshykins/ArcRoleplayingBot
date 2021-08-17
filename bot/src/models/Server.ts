@@ -4,6 +4,7 @@ import { mongoClient } from './connectionSetup';
 
 export interface Server {
     _id?: ObjectId;
+    serverId: string;
     notificationsChannel: string;
     adminRole: string;
     enableNewUserNotification: Boolean;

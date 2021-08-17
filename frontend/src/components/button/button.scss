@@ -1,0 +1,79 @@
+@import '../../globals/globalStyling.scss';
+
+.button {
+    padding: 7px 7px;
+    outline: 0px solid transparent;
+    border: 0px solid transparent;
+    display: block;
+    cursor: pointer;
+    font-weight: 400;
+    box-sizing: border-box;
+    border-radius: 5px;
+    position: relative;
+    overflow: hidden;
+    margin: 20px;
+    background-color: transparent;
+    transition: cubic-bezier(0.075, 0.82, 0.165, 1) 700ms;
+    color: $cta;
+    &:hover {
+        color: $ctaHover;
+    }
+
+
+    &.success {
+        background: $cta;
+        color: white;
+        &:hover {
+            background: $ctaHover;
+            color: white;
+        }
+    }
+
+    &.failure {
+        border: 0px solid transparent;
+        background-color: transparent;
+        color: red;
+        border: 1px solid red;
+        
+        &:hover {
+            background-color: rgb(209, 17, 17);
+            color: white;
+        }
+    }
+
+    &.disabled {
+        color:rgba(228, 228, 228, 0.3);
+        cursor: default;
+        background-color: transparent;
+        border: transparent;
+        &:hover {
+            color:rgba(228, 228, 228, 0.3);
+            background-color: transparent;
+            border: transparent;
+        }
+    }
+    
+    &Ripple {
+        position: absolute;
+        border-radius: 50%;
+        background-color: rgba(255, 255, 255, 0.3);
+        width: 100px;
+        height: 100px;
+        margin-top: -50px;
+        margin-left: -50px;
+        animation: ripple 1s;
+        opacity: 0;
+    }
+}
+
+
+@keyframes ripple {
+    from {
+      opacity: 1;
+      transform: scale(0);
+    }
+    to {
+      opacity: 0;
+      transform: scale(10);
+    }
+  }

@@ -1,0 +1,168 @@
+$navHeight: 120px;
+$navBreakPoint: 1280px;
+
+.navButton {
+    user-select: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 100%;
+    position: absolute;
+    transform: translate(5%, -50%);
+    top: 50%;
+    right: 25px;
+    border: 2px solid #1D2127;
+    cursor: pointer;
+    transition: cubic-bezier(0.075, 0.82, 0.165, 1) 800ms;
+    &.active {
+        border: 2px solid #ED3228;
+        background-color: #1D2127;
+        transform: rotate(90deg) translate(-50%, 0%);
+        transition: cubic-bezier(0.075, 0.82, 0.165, 1) 800ms;
+        div {
+            background-color: #ED3228;
+            transition: cubic-bezier(0.075, 0.82, 0.165, 1) 800ms;
+            &::after {
+                background-color: #ED3228;
+                transition: cubic-bezier(0.075, 0.82, 0.165, 1) 800ms;
+            }
+            &::before {
+                background-color: #ED3228;
+                transition: cubic-bezier(0.075, 0.82, 0.165, 1) 800ms;
+            }
+
+        }
+    }
+    div {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 25px;
+        background-color: white;
+        height: 2px;
+        &::after {
+            content: "";
+            display: block;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-52%, 350%);
+            width: 25px;
+            background-color: white;
+            height: 2px;
+        }
+        &::before {
+            content: "";
+            display: block;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-52%, -450%);
+            width: 25px;
+            background-color: white;
+            height: 2px;
+        }
+    }
+}
+
+.nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    box-sizing: border-box;
+    border: 5px solid #1D2127;
+    width: 100%; 
+    height: $navHeight;
+    display: flex;
+    justify-content: space-around;
+    .login {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        right: 15px;
+        height: 100%;
+    }
+    .logo {
+        $logoDivider: 1.4;
+        position: absolute;
+        top: 50%;
+        left: 0;
+        img {
+            height: 80px;
+        }
+        transform: translate(5%, -50%);
+        height: 80px;
+    }
+    .links a {
+        color: white;
+        text-decoration: none;
+        user-select: none;
+        transition: cubic-bezier(0.075, 0.82, 0.165, 1) 700ms;
+    }
+}
+
+.navMobile {
+    .links {
+        left: 0;
+        transition: cubic-bezier(0.165, 0.84, 0.44, 1) 700ms;
+        &.close {
+            left: 100vw;
+        }
+        background-color: #2F3338;
+        position: fixed;
+        top: $navHeight;
+        height: calc(100vh - #{$navHeight});
+        width: 100vw;
+    }
+    .links a {
+        width: 100%;
+        text-align: center;
+        display: block;
+        padding: 15px 0px;
+        &:hover {
+            background-color: #1D2127;
+        }
+        &.active {
+            color:#ED3228;
+        }
+    }
+}
+.navDesktop {
+    .links {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        display: flex;
+        a {
+            line-height: 107.5px;
+            display: block;
+            border-bottom: 3px solid transparent;
+            padding: 0 20px;
+            margin: 0 20px;
+            width: max-content;
+            &:hover {
+                border-bottom: 3px solid #ED3228;
+                background-color: #1D2127;
+            }
+            &.active {
+                border-bottom: 3px solid #ED3228;
+            }
+        }
+
+    }
+}
+
+
+
+@media screen and (max-width: $navBreakPoint) {
+    .navDesktop {
+        display: none
+    }
+}
+@media screen and (min-width: $navBreakPoint) {
+    .navMobile {
+        display: none
+    }
+}

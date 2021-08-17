@@ -1,43 +1,36 @@
 import { Guild } from "discord.js"
-import { Character } from "../models/Character";
-import { IServer, Server } from "../models/Server"
+import { Character, Characters } from "../models/Character";
+import { DefaultFieldsForServer } from "../models/CharacterField";
+import { Servers, Server } from "../models/Server"
 
-export const initializeServer = async(guild: Guild): Promise<string> => {
-    const server : IServer= new Server({
-        id: guild.id,
-        name: guild.name
-    });
+export const InitializeServer = async (guild: Guild): Promise<string> => {
+    let server : Server= {
+        serverId: guild.id,
+        notificationsChannel: null,
+        adminRole: null,
+        enableNewUserNotification: false,
+        defaultFields: DefaultFieldsForServer
+    };
+
+    const ServersCollection = await Servers();
+    const existingServer = await ServersCollection.findOne({serverId: guild.id});
 
 
-
-    try {
-        await server.save();
+    if(!existingServer) {
+        await ServersCollection.insertOne(server);
         return "Server Initialized";
     }
-    catch(err) {
-        console.log(err);
-        //Remove characters,
-        try {
+    else {
+        const CharactersCollection = await Characters();
+        const charactersInServer = CharactersCollection.find({serverId : guild.id});
+        const oldServer = ServersCollection.find({serverId: guild.id});
 
-            const charactersInServer = Character.find({serverId: guild.id});
-            const oldServer = Server.find({id: guild.id});
-    
-            //Remove Server
-    
-            await oldServer.deleteMany().exec();
-            await charactersInServer.deleteMany().exec();
-            
-            //Reinitalize
-            const server : IServer= new Server({
-                id: guild.id,
-                name: guild.name
-            });
-            await server.save();
-            return "Server Was Already Initialized \n \n WARNING: Server Reinitialized, ALL server information reset.";
-        }
-        catch(err) {
-            console.log(err);
-            return "Something went wrong in reintialization";
-        }
+        await CharactersCollection.deleteMany(charactersInServer);
+        await ServersCollection.deleteMany(oldServer);
+
+        await ServersCollection.insertOne(server);
+
+
+        return "Server Was Already Initialized \n \n WARNING: Server Reinitialized, ALL server information reset.";
     }
 }

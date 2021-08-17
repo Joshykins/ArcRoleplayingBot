@@ -1,0 +1,21 @@
+.counterExample {
+  &Button {
+    color: white;
+    background-color: transparent;
+    border: 0;
+    padding: 15px;
+    cursor: pointer;
+    box-sizing: border-box;
+    border: 1px solid white;
+    margin-right: 10px;
+    transition: 300ms;
+    &:hover {
+      transition: 300ms;
+      background-color: white;
+      color: black;
+    }
+    &:focus {
+      outline: 0 !important;
+    }
+  }
+}

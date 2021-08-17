@@ -1,0 +1,56 @@
+@import "./reset.scss";
+$cta: #ED3228;
+$ctaHover: #d12a21;
+$highlight: #FC7032;
+$highlightBg:  linear-gradient(135deg, $cta 0%, $highlight 100%);
+
+//Global Styles
+* {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 300;
+  color: white;
+}
+a {
+  color: rgba(10,100,255,1);
+  font-weight: 300;
+}
+html,
+body {
+  background: #1D2127;
+  h1 {
+    color: #ffff;
+    font-weight: 600;
+    font-size: 41px;
+    margin: 12px 0;
+  }
+  h2 {
+    color: #DBDBDB;
+    font-weight: 300;
+    font-size: 25px;
+    margin: 12px 0;
+  }
+  span {
+    color: $highlight;
+  }
+  p {
+    margin: 12px 0px;
+    color: #DBDBDB;
+    letter-spacing: 1.4px;
+    line-height: 24px;
+    font-weight: 300;
+  }
+}
+
+.tileBg {
+  background: rgb(61,64,70);
+  background: linear-gradient(180deg, rgba(61,64,70,1) 0%, rgba(45,48,56,1) 100%);
+}
+
+.highlightBg {
+  background: $highlightBg;
+}
+
+.tileShadow {
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+

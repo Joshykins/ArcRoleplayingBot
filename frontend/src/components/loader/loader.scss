@@ -1,0 +1,43 @@
+@import '../../globals/globalStyling.scss';
+
+.loader {
+    position: fixed;
+    right: 0px;
+    bottom: 0px;
+    display: block;
+    z-index: 100;
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: 400;
+    font-size: 12px;
+    letter-spacing: .5px;
+    background-size: 100% 100%, 2000% 100%;
+    overflow: hidden;
+    background:  linear-gradient(180deg, $cta, $highlight);
+
+    animation: move 5s ease infinite;
+    background-size: 1800% 1800%;
+    transition: 
+        700ms width cubic-bezier(0.165, 0.84, 0.44, 1),
+        300ms color cubic-bezier(0.19, 1, 0.22, 1),
+        500ms transform cubic-bezier(0.19, 1, 0.22, 1)
+    ;
+    &.open {
+        width: 100vw;
+        padding: 3px;
+        transform: translateX(-50%) translateY(0%);
+        color: white;
+        
+    }
+    color: transparent;
+    width: 0vw;
+    left: 50%;
+    padding: 3px 0px;
+    transform: translateX(-50%) translateY(90%);
+}
+
+@keyframes move {
+    0% {background-position: 0 82%;}
+    50% {background-position: 100% 19%;}
+    100% {background-position: 0 82%;}
+   }

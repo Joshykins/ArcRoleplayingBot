@@ -1,0 +1,30 @@
+{
+  "name": "react-ts-sc-boilerplate",
+  "version": "0.0.1",
+  "license": "MIT",
+  "repository": "https://github.com/Joshykins/react-redux-ts-scss-boilerplate",
+  "dependencies": {
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-redux": "^7.1.0",
+    "react-router-dom": "^5.1.2",
+    "redux": "^4.1.1",
+    "typescript": "^4.3.5"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.15.0",
+    "@babel/preset-react": "^7.14.5",
+    "@parcel/transformer-image": "^2.0.0-rc.0",
+    "@parcel/transformer-sass": "^2.0.0-rc.0",
+    "@types/react": "^17.0.18",
+    "@types/react-dom": "^17.0.9",
+    "@types/react-redux": "^7.1.18",
+    "@types/react-router-dom": "^5.1.8",
+    "parcel": "^2.0.0-rc.0"
+  },
+  "scripts": {
+    "build": "parcel build ./src/entry/index.html",
+    "start": "parcel serve ./src/entry/index.html",
+    "dev": "parcel serve ./src/entry/index.html"
+  }
+}
